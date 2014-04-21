@@ -1,0 +1,281 @@
+<% include ../../layouts/head %>
+
+    <% include ../../layouts/topbar %>
+
+    <div class="container">
+        <form class="form-inline">
+        <label for="selectDate" class="control-label">日期：</label>
+        <input id="selectDate" type="text" class="select-date" name="deliveryDate">
+        <label for="selectExpressCompany" class="control-label">快递公司：</label>
+        <select id="selectExpressCompany" name="expressCompany" class="express-company">
+            <option value="">-请选择-</option>
+            <% for (var i = 0; i < _expressCompany.length; i += 1) { %>
+            <option value="<%= _expressCompany[i].name%>"><%= _expressCompany[i].name%></option>
+            <% } %>
+        </select>
+        <label for="selectPaymentTerm" class="control-label">费用结算方式：</label>
+        <select id="selectPaymentTerm" name="paymentTerm" class="payment-term">
+            <option value="">-请选择-</option>
+            <% for(var j = 0; j < _paymentTerm.length; j += 1) { %>
+            <option value="<%= _paymentTerm[j].name%>"><%= _paymentTerm[j].name%></option>
+            <% } %>
+        </select>
+        <button type="button" class="btn" id="search">检索</button>
+        <button type="button" class="btn" id="print">打印当前日期报表</button>
+        <% if(_lock) { %>
+        <button type="button" class="btn btn-primary" id="lock" data-lock="true" data-loading-text="提交中，请稍候..." data-lock-text="截止今天快递申请" data-unlock-text="取消截止今天快递申请">取消截止今天快递申请</button>
+        <% } else { %>
+        <button type="button" class="btn btn-primary" id="lock" data-lock="false" data-loading-text="提交中，请稍候..." data-lock-text="截止今天快递申请" data-unlock-text="取消截止今天快递申请">截止今天快递申请</button>
+        <% } %>
+        </form>
+        <div id="list"></div>
+        <div id="edit-dialog">
+        </div>
+        <form id="add-sub-item" class="form-horizontal" style="display: none;">
+        <div class="control-group">
+            <label class="control-label" for="selectDepartment">所属部门</label>
+            <div class="controls">
+                <select id="selectDepartment" name="department">
+                    <option value="">-请选择-</option>
+                    <% for (var k = 0; k < _department.length; k += 1) { %>
+                    <option value="<%= _department[k].name%>"><%= _department[k].name%></option>
+                    <% } %>
+                </select>
+                <span class="help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="inputSender">发件人</label>
+            <div class="controls">
+                <input type="text" id="inputSender" name="sender" placeholder="发件人">
+                <span class="help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="inputSenderPhone">发件人电话</label>
+            <div class="controls">
+                <input type="text" id="inputSenderPhone" name="senderPhone" placeholder="发件人电话">
+                <span class="help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="inputRecipient">收件人</label>
+            <div class="controls">
+                <input type="text" id="inputRecipient" name="recipient" placeholder="收件人">
+                <span class="help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="inputRecipientPhone">收件人电话</label>
+            <div class="controls">
+                <input type="text" id="inputRecipientPhone" name="recipientPhone" placeholder="收件人电话">
+                <span class="help-inline"></span>
+            </div>
+        </div>
+        <!--<div class="control-group">
+            <label class="control-label" for="inputRecipientAddress">收件人地址</label>
+            <div class="controls">
+                <input type="text" id="inputRecipientAddress" name="recipientAddress" placeholder="收件人地址">
+                <span class="help-inline"></span>
+            </div>
+        </div>-->
+        <div class="control-group">
+            <label class="control-label" for="inputFileType">所邮寄文件类型</label>
+            <div class="controls">
+                <input type="text" id="inputFileType" name="fileType" placeholder="所邮寄文件类型">
+                <span class="help-inline"></span>
+                <span class="help-block">（简单描述，如：发票）</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="inputDeliveryReason">快递原因</label>
+            <div class="controls">
+                <input type="text" id="inputDeliveryReason" name="deliveryReason" placeholder="快递原因">
+                <span class="help-inline"></span>
+                <span class="help-block">（简单描述，如：寄发票供收款用）</span>
+            </div>
+        </div>
+        </form>
+    </div>
+
+    <script type="text/javascript" src="/js/admin/admin.js"></script>
+    <script type="text/html" id="list-template">
+        <table class="table table-condensed table-bordered">
+            <colgroup>
+                <col style="width: 135px;"/>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>快递日期</th>
+                    <th>申请日期</th>
+                    <th>快递公司</th>
+                    <th>快递单号</th>
+                    <th>费用结算方式</th>
+                    <th>所属部门</th>
+                    <th>发件人</th>
+                    <th>发件人电话</th>
+                    <th>收件人</th>
+                    <th>收件人电话</th>
+                    <th>收件人地址</th>
+                    <th>所邮寄文件类型</th>
+                    <th>快递原因</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ for(var i = 0; i < expressItems.length; i += 1) {
+                    var item = expressItems[i];
+                    var subItems = item.subItems; }}
+                <tr>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-id="{{= item._id }}">编辑</button>&nbsp;
+                        <button type="button" class="btn btn-danger" data-id="{{= item._id }}">删除</button>
+                    </td>
+                    <td>{{= item.deliveryDate }}</td>
+                    <td>{{= item.dateOfApplication }}</td>
+                    <td>{{= item.expressCompany }}</td>
+                    <td>{{= item.expressNumber }}</td>
+                    <td>{{= item.paymentTerm }}</td>
+                    <td>{{= subItems[0].department }}</td>
+                    <td>{{= subItems[0].sender }}</td>
+                    <td>{{= subItems[0].senderPhone }}</td>
+                    <td>{{= subItems[0].recipient }}</td>
+                    <td>{{= subItems[0].recipientPhone }}</td>
+                    <td>{{= subItems[0].recipientAddress }}</td>
+                    <td>{{= subItems[0].fileType }}</td>
+                    <td>{{= subItems[0].deliveryReason }}</td>
+                </tr>
+                {{ for(var j = 1; j < subItems.length; j += 1) { 
+                     var subItem = subItems[j]; }}
+                <tr>
+                    <td colspan="6">搭单</td>
+                    <td>{{= subItem.department }}</td>
+                    <td>{{= subItem.sender }}</td>
+                    <td>{{= subItem.senderPhone }}</td>
+                    <td>{{= subItem.recipient }}</td>
+                    <td>{{= subItem.recipientPhone }}</td>
+                    <td>{{= subItem.recipientAddress }}</td>
+                    <td>{{= subItem.fileType }}</td>
+                    <td>{{= subItem.deliveryReason }}</td>
+                </tr>
+                {{ } }}
+                {{ } }}
+            </tbody>
+        </table>
+        <div class="pagination">
+            <ul>
+                {{ var pages = Math.ceil(count / size);
+                    for(var k = 1; k <= pages; k += 1) { 
+                    if(k === page) {
+                }}
+                <li class="active"><a href="javascript:void(0);">{{= k }}</a></li>
+                {{ } else { }}
+                <li data-page="{{= k }}"><a href="#">{{= k }}</a></li>
+                {{ } } }}
+            </ul>
+        </div>
+    </script>
+    <script type="text/html" id="edit_dialog_template">
+        <form class="form-horizontal" action="" method="post">
+          <input type="hidden" id="_id" name="_id" value="{{= _id }}"/>
+          <div class="control-group">
+            <label class="control-label" for="selectDestination">快递目的地</label>
+            <div class="controls">
+              <select id="selectDestination" name="destination" class="required" value="{{= destination }}">
+                <option value="">-请选择-</option>
+                <option {{ if(destination === '办事处') { }} selected="selected" {{ } }} value="办事处">办事处</option>
+                <option {{ if(destination === '非办事处') { }} selected="selected" {{ } }} value="非办事处">非办事处</option>
+              </select>
+              <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="selectExpressCompany">快递公司</label>
+            <div class="controls">
+              <select id="selectExpressCompany" name="expressCompany" class="required" value="{{= expressCompany }}">
+                <option value="">-请选择-</option>
+                <% for (var i = 0; i < _expressCompany.length; i += 1) { %>
+                <option {{ if(expressCompany === '<%=_expressCompany[i].name%>') { }} selected="selected" {{ } }} value="<%= _expressCompany[i].name%>"><%= _expressCompany[i].name%></option>
+                <% } %>
+              </select>
+              <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputExpressNumber">快递单号</label>
+            <div class="controls">
+              <input type="text" id="inputExpressNumber" name="expressNumber" class="required" placeholder="快递单号" value="{{= expressNumber }}">
+              <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="selectPaymentTerm">费用结算方式</label>
+            <div class="controls">
+              <select id="selectPaymentTerm" name="paymentTerm" class="required" value="{{= paymentTerm }}">
+                <option value="">-请选择-</option>
+                <% for(var j = 0; j < _paymentTerm.length; j += 1) { %>
+                <option {{ if(paymentTerm === '<%=_paymentTerm[j].name%>') { }} selected="selected" {{ } }} value="<%= _paymentTerm[j].name%>"><%= _paymentTerm[j].name%></option>
+                <% } %>
+              </select>
+              <span class="help-inline"></span>
+            </div>
+          </div>
+        </form>
+        <p>
+            <button type="button" class="btn btn-primary" id="add_sub_item">添加</button>
+        </p>
+        <table class="table table-condensed table-bordered">
+            <colgroup>
+                <col style="width: 80px;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>所属部门</th>
+                    <th>发件人</th>
+                    <th>发件人电话</th>
+                    <th>收件人</th>
+                    <th>收件人电话</th>
+                    <th>收件人地址</th>
+                    <th>所邮寄文件类型</th>
+                    <th>快递原因</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ for(var j = 0; j < subItems.length; j += 1) { 
+                    var subItem = subItems[j]; }}
+                <tr>
+                    <td>
+                        <button type="button" class="btn btn-danger" id="{{= subItem._id }}">删除</button>
+                    </td>
+                    <td>{{= subItem.department }}</td>
+                    <td>{{= subItem.sender }}</td>
+                    <td>{{= subItem.senderPhone }}</td>
+                    <td>{{= subItem.recipient }}</td>
+                    <td>{{= subItem.recipientPhone }}</td>
+                    <td>{{= subItem.recipientAddress }}</td>
+                    <td>{{= subItem.fileType }}</td>
+                    <td>{{= subItem.deliveryReason }}</td>
+                </tr>
+                {{ } }}
+            </tbody>
+        </table>
+    </script>
+    <script type="text/html" id="sub_item_template">
+        <tr>
+            <td>
+                <button type="button" class="btn btn-danger" id="{{=_id }}">删除</button>
+            </td>
+            <td>{{= department }}</td>
+            <td>{{= sender }}</td>
+            <td>{{= senderPhone }}</td>
+            <td>{{= recipient }}</td>
+            <td>{{= recipientPhone }}</td>
+            <td>{{= recipientAddress }}</td>
+            <td>{{= fileType }}</td>
+            <td>{{= deliveryReason }}</td>
+        </tr>
+    </script>
+
+
+<% include ../../layouts/foot %>

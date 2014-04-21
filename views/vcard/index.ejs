@@ -1,0 +1,83 @@
+<% include ../layouts/head %>
+<% include ../layouts/topbar %>
+
+    <div class="container">
+        <div class="row">
+          <div class="span6">
+            <form class="form-horizontal">
+              <div class="control-group">
+                <label class="control-label" for="inputFirstName">姓名</label>
+                <div class="controls">
+                  <input type="text" id="inputFirstName" name="firstName" class="required input-small" placeholder="名">
+                  <input type="text" id="inputLastName" name="lastName" class="required input-small" placeholder="姓">
+                  <span class="help-inline"></span>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="inputCompanyName">所属公司或组织</label>
+                <div class="controls">
+                  <input type="text" id="inputCompanyName" name="companyName" placeholder="所属公司或组织">
+                  <span class="help-inline"></span>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="inputTitle">职位</label>
+                <div class="controls">
+                  <input type="text" id="inputTitle" name="title" placeholder="职位">
+                  <span class="help-inline"></span>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="inputPhone">工作电话</label>
+                <div class="controls">
+                  <input type="text" id="inputPhone" name="phone" class="required phone" placeholder="工作电话">
+                  <span class="help-inline"></span>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="inputAddress">工作地址</label>
+                <div class="controls">
+                  <input type="text" id="inputAddress" name="address" placeholder="工作地址">
+                  <span class="help-inline"></span>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="inputEmail">电子邮件</label>
+                <div class="controls">
+                  <input type="text" id="inputEmail" name="email" placeholder="电子邮件">
+                  <span class="help-inline"></span>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <div class="controls">
+                  <button type="submit" class="btn btn-primary" data-loading-text="生成中，请稍候...">生成vcard</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="span6">
+            <div id="qrcode"></div>
+          </div>
+        </div>
+    </div>
+    <!-- <script type="text/javascript" src="/query/jquery.qrcode.min.js"></script> -->
+    <script type="text/javascript" src="/3rd/webtoolkit.utf8.js"></script>
+    <script type="text/javascript" src="/jquery/qrcode.js"></script>
+    <script type="text/javascript" src="/jquery/jquery.qrcode.js"></script>
+    <script type="text/javascript" src="/js/vcard.js"></script>
+    <script type="text/html" id="vcard-tmpl">
+BEGIN:VCARD
+VERSION:4.0
+FN:{{=lastName}} {{=firstName}}
+{{if(companyName){ }}ORG:{{=companyName}} {{ } }}
+{{if(title){ }}TITLE:{{=title}} {{ } }}
+{{if(phone){ }}TEL;TYPE=WORK:{{=phone}}{{ } }}
+{{if(address){ }}ADR;TYPE=WORK:{{=address}}{{ } }}
+{{if(email){ }}EMAIL;TYPE=PREF,INTERNET:{{=email}}{{ } }}
+END:VCARD
+    </script>
+    <!--FN:{{=lastName}}{{=firstName}} -->
+    <!-- REV:{{=$.datepicker.formatDate('yy-mm-dd', new Date())}} -->
+
+<% include ../layouts/foot %>

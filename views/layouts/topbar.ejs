@@ -1,0 +1,60 @@
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="/">快递申请系统</a>
+                <div class="nav-collapse">
+                    <ul class="nav pull-right">
+                        <% if(__selected_uri === '/') { %>
+                        <li class="active"><a href="javascript:void(0);">首页</a></li>
+                        <% } else { %>
+                        <li><a href="/">首页</a></li>
+                        <% } %>
+                        <% if(__selected_uri === '/history') { %>
+                        <li class="active"><a href="javascript:void(0);">查看快递列表</a></li>
+                        <% } else { %>
+                        <li><a href="/history">查看快递列表</a></li>
+                        <% } %>
+						<!-- <li><a href="/vcard">制作vcard</a></li> -->
+                        <!-- <li><a href="/qrscaner">扫描二维码</a></li> -->
+                        <li class="divider-vertical"></li>
+                        <% if(__authenticated) { %>
+                        <% if(__selected_uri === '/admin/delivery') { %>
+                        <li class="active"><a href="javascript:void(0);">快递申请</a></li>
+                        <% } else { %>
+                        <li><a href="/admin/delivery">快递申请</a></li>
+                        <% } %>
+                        <% if(__selected_uri === '/admin/delivery-company') { %>
+                        <li class="active"><a href="javascript:void(0);">快递公司</a></li>
+                        <% } else { %>
+                        <li><a href="/admin/delivery-company">快递公司</a></li>
+                        <% } %>
+                        <% if(__selected_uri === '/admin/payment-term') { %>
+                        <li class="active"><a href="javascript:void(0);">付款方式</a></l>
+                        <% } else { %>
+                        <li><a href="/admin/payment-term">付款方式</a></li>
+                        <% } %>
+                        <% if(__selected_uri === '/admin/office') { %>
+                        <li class="active"><a href="javascript:void(0);">办事处</a></l>
+                        <% } else { %>
+                        <li><a href="/admin/office">办事处</a></li>
+                        <% } %>
+                        <% if(__selected_uri === '/admin/department') { %>
+                        <li class="active"><a href="javascript:void(0);">部门</a></li>
+                        <% } else { %>
+                        <li><a href="/admin/department">部门</a></li>
+                        <% } %>
+                        <li><a href="/user/logout">退出</a></li>
+                        <% } else { %>
+                        <li><a href="/user/login">管理员登录</a></li>
+                        <% } %>
+                    </ul>
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+        </div>
+    </div>

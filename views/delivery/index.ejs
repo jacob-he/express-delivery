@@ -1,0 +1,273 @@
+<% include ../layouts/head %>
+
+<% include ../layouts/topbar %>
+
+<div class="container">
+  <div class="row">
+    <div class="span6">
+      <% if(_lock) { %>
+      <p id="locking-text" class="text-warning">今天的快递申请已经结束，您现在填写的快递申请将会在明天送出。</p>
+      <% } %>
+      <form class="form-horizontal" action="/delivery/insert" method="post">
+        <div class="control-group">
+          <div class="controls">
+            <button type="button" id="load_from_local" disabled="disabled" class="btn btn-primary" data-loading-text="加载中，请稍候...">加载本地记录</button>
+            <button type="button" id="clear_local" disabled="disabled" class="btn btn-primary" data-loading-text="清除中，请稍候...">清除本地记录</button>
+            <!-- <button type="button" id="sync_with_server" class="btn btn-primary" data-loading-text="同步中，请稍候...">同步到服务器</button> -->
+            <span class="help-block">本地存储功能只支持firefox 12+, chrome 19+</span>
+          </div>
+        </div>
+        <input type="hidden" id="_id" name="_id" />
+        <div class="control-group">
+          <label class="control-label" for="selectDestination">快递目的地</label>
+          <div class="controls">
+            <select id="selectDestination" name="destination">
+              <option value="">-请选择-</option>
+              <option value="办事处">办事处</option>
+              <option value="非办事处">非办事处</option>
+            </select>
+            <span class="help-inline"></span>
+            <button type="button" class="btn btn-warning" id="join" style="display:none;">搭单</button>
+          </div>
+        </div>
+        <%
+           var _names = [];
+           var _offoce_areas = {};
+
+           _offices.forEach(function(office){
+           _names.push(office.name + '：' + office.address);
+           if(!(office.area in _offoce_areas)){
+           _offoce_areas[office.area] = [];
+           }
+           _offoce_areas[office.area].push({
+           name: office.name
+           , address: office.address
+           });
+           });
+           for(var p in _offoce_areas) {
+           _offoce_areas[p] = _offoce_areas[p].sort(function(left, right){
+           if(left.name > right.name) {
+        return 1;
+        }
+        if(left.name < right.name) {
+                       return -1;
+                       }
+                       return 0;
+                       });
+                       }
+                       %>
+          <div class="control-group">
+            <label class="control-label" for="inputRecipientAddress">收件人地址</label>
+            <div class="controls">
+              <input type="text" id="inputRecipientAddress" name="recipientAddress" placeholder="收件人地址" data-provide="typeahead" data-source="<%= JSON.stringify(_names) %>" data-items="8">
+              <span class="help-inline"></span>
+            </div>
+            <div class="controls" id="area-controls" style="display:none;">
+              <ul class="nav nav-pills">
+                <% for(var p2 in _offoce_areas) { %>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <%= p2 %>
+                    <b class="caret"></b>
+                  </a>
+                  <ul id="<%= p2 %>" class="dropdown-menu">
+                    <% for(var i = 0; i < _offoce_areas[p2].length; i += 1) { %>
+                       <li><a href="#" data-full-address="<%= _offoce_areas[p2][i].name + '：' + _offoce_areas[p2][i].address %>"><%= _offoce_areas[p2][i].name %></a></li>
+                       <% } %>
+                  </ul>
+                </li>
+                <% } %>
+              </ul>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="selectExpressCompany">快递公司</label>
+            <div class="controls">
+              <select id="selectExpressCompany" name="expressCompany">
+                <option value="">-请选择-</option>
+                <% for (var i = 0; i < _expressCompany.length; i += 1) { %>
+                   <option value="<%= _expressCompany[i].name%>"><%= _expressCompany[i].name%></option>
+                   <% } %>
+              </select>
+              <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputExpressNumber">快递单号</label>
+            <div class="controls">
+              <input type="text" id="inputExpressNumber" name="expressNumber" placeholder="快递单号">
+              <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="selectDepartment">所属部门</label>
+            <div class="controls">
+              <select id="selectDepartment" name="department">
+                <option value="">-请选择-</option>
+                <% for (var k = 0; k < _department.length; k += 1) { %>
+                   <option value="<%= _department[k].name%>"><%= _department[k].name%></option>
+                   <% } %>
+              </select>
+              <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputSender">发件人</label>
+            <div class="controls">
+              <input type="text" id="inputSender" name="sender" placeholder="发件人">
+              <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputSenderPhone">发件人电话</label>
+            <div class="controls">
+              <input type="text" id="inputSenderPhone" name="senderPhone" placeholder="发件人电话">
+              <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputRecipient">收件人</label>
+            <div class="controls">
+              <input type="text" id="inputRecipient" name="recipient" placeholder="收件人">
+              <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputRecipientPhone">收件人电话</label>
+            <div class="controls">
+              <input type="text" id="inputRecipientPhone" name="recipientPhone" placeholder="收件人电话">
+              <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputFileType">所邮寄文件类型</label>
+            <div class="controls">
+              <input type="text" id="inputFileType" name="fileType" placeholder="所邮寄文件类型">
+              <span class="help-inline"></span>
+              <span class="help-block">（简单描述，如：发票）</span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputDeliveryReason">快递原因</label>
+            <div class="controls">
+              <input type="text" id="inputDeliveryReason" name="deliveryReason" placeholder="快递原因">
+              <span class="help-inline"></span>
+              <span class="help-block">（简单描述，如：寄发票供收款用）</span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="selectPaymentTerm">费用结算方式</label>
+            <div class="controls">
+              <select id="selectPaymentTerm" name="paymentTerm">
+                <option value="">-请选择-</option>
+                <% for(var j = 0; j < _paymentTerm.length; j += 1) { %>
+                   <option value="<%= _paymentTerm[j].name%>"><%= _paymentTerm[j].name%></option>
+                   <% } %>
+              </select>
+              <span class="help-inline"></span>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <div class="controls">
+              <button type="submit" id="submit" class="btn btn-primary" data-loading-text="提交中，请稍候...">提交</button>
+              <button type="button" id="save_to_local" disabled="disabled" class="btn btn-primary" data-loading-text="保存中，请稍候...">保存在本地</button>
+              <span class="help-block">点击提交按钮将发送数据到服务器。点击保存在本地可以把当前表单数据保存在本地的数据库中，你可以点击表单上面的加载本地记录找回你之前保存在本地的记录，这样可以快速的重复输入以前输入过的内容。</span>
+            </div>
+          </div>
+      </form>
+    </div>
+    <div class="span6">
+      <h4>快递申请流程</h4>
+      <img src="img/flow.png">
+    </div>
+  </div>
+
+  <div id="matching-dialog"></div>
+  <div id="history-dialog"></div>
+  <div class="modal hide" id="locking-dialog">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">×</button>
+      <h3>截止快递申请通知</h3>
+    </div>
+    <div class="modal-body">
+      <p>今天的快递申请已经结束，您现在填写的快递申请将会在明天送出。</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal">关闭</a>
+    </div>
+  </div>
+
+</div>
+
+<script type="text/javascript" src="/js/delivery.js"></script>
+<script type="text/html" id="matching-template">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>快递公司</th>
+        <th>快递公司</th>
+        <th>费用结算方式</th>
+        <th>收件人地址</th>
+        <th style="display: none;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ items.forEach(function (item) { }}
+      <tr style="cursor:pointer;">
+        <td>{{= item.expressCompany }}</td>
+        <td>{{= item.expressNumber }}</td>
+        <td>{{= item.paymentTerm }}</td>
+        <td>{{= item.subItems[0].recipientAddress }}</td>
+        <td style="display: none;">{{= item._id }}</td>
+      </tr>
+      {{ }); }}
+    </tbody>
+  </table>
+</script>
+<script type="text/html" id="history-template">
+  <table class="table table-hover">
+    <colgroup>
+      <col style="width:80px;"/>
+    </colgroup>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>快递目的地</th>
+        <th>收件人地址</th>
+        <th>快递公司</th>
+        <th>快递单号</th>
+        <th>所属部门</th>
+        <th>发件人</th>
+        <th>发件人电话</th>
+        <th>收件人</th>
+        <th>收件人电话</th>
+        <th>所邮寄文件类型</th>
+        <th>快递原因</th>
+        <th>费用结算方式</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ histories.forEach(function(history) { }}
+      <tr style="cursor:pointer;">
+        <td><button type="button" class="btn btn-danger" data-id="{{= history._id }}">删除</button></td>
+        <td>{{= history.destination }}</td>
+        <td>{{= history.recipientAddress }}</td>
+        <td>{{= history.expressCompany }}</td>
+        <td>{{= history.expressNumber }}</td>
+        <td>{{= history.department }}</td>
+        <td>{{= history.sender }}</td>
+        <td>{{= history.senderPhone }}</td>
+        <td>{{= history.recipient }}</td>
+        <td>{{= history.recipientPhone }}</td>
+        <td>{{= history.fileType }}</td>
+        <td>{{= history.deliveryReason }}</td>
+        <td>{{= history.paymentTerm }}</td>
+      </tr>
+      {{ }); }}
+    </tbody>
+  </table>
+</script>
+<script type="text/javascript" src="/pouchdb/pouch.alpha.js"></script>
+
+<% include ../layouts/foot %>

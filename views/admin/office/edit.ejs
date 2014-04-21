@@ -1,0 +1,31 @@
+﻿<input type="hidden" name="id" value="<%= _id %>"/>
+<div class="control-group">
+  <label class="control-label" for="selectArea">大区</label>
+  <div class="controls">
+    <select id="selectArea" name="area" value="<%= area %>" class="required">
+      <option value="">-请选择-</option>
+      <option <% if(area === '华东地区') { %> selected="selected" <% } %> value="华东地区">华东地区</option>
+      <option <% if(area === '华南地区') { %> selected="selected" <% } %> value="华南地区">华南地区</option>
+      <option <% if(area === '福建地区') { %> selected="selected" <% } %> value="福建地区">福建地区</option>
+      <option <% if(area === '香港地区') { %> selected="selected" <% } %> value="香港地区">香港地区</option>
+      <option <% if(area === '华北地区') { %> selected="selected" <% } %> value="华北地区">华北地区</option>
+      <option <% if(area === '其它地区') { %> selected="selected" <% } %> value="其它地区">其它地区</option>
+    </select>
+    <span class="help-inline"></span>
+  </div>
+</div>
+<div class="control-group">
+    <label class="control-label" for="inputName">办事处</label>
+    <div class="controls">
+        <input type="text" id="inputName" name="name" placeholder="办事处" value="<%= name %>" class="required">
+        <span class="help-inline"></span>
+    </div>
+    
+</div>
+<div class="control-group">
+    <label class="control-label" for="inputName">地址</label>
+    <div class="controls">
+        <input type="text" id="inputAddress" name="address" placeholder="地址" value="<%= address %>" class="required">
+        <span class="help-inline"></span>
+    </div>
+</div>

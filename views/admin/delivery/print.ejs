@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>快递列表</title>
+    <meta http-equiv="charset" content="utf-8" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+    <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <style type="text/css">
+        .logo {
+            background: url("/img/logo.png") 0 4px no-repeat;
+            text-indent: 35px;
+        }
+
+        .navbar .brand {
+            color: #FFFFFF;
+        }
+
+        .navbar-inner {
+            background-color: #4C5E9A;
+            background-image: -moz-linear-gradient(center top, #4C5E9A, #33488C);
+            background-image: -webkit-linear-gradient(top, #4C5E9A, #33488C);
+            filter: progid:dximagetransform.microsoft.gradient(startColorstr='#4C5E9A', endColorstr='#33488C', GradientType=0);
+        }
+
+        .navbar .nav .active > a, .navbar .nav .active > a:hover {
+            background-color: #33488C;
+        }
+
+        .navbar .divider-vertical {
+            background-color: #33488C;
+            border-right: 1px solid #4C5E9A;
+        }
+
+        .inner-table {
+            border-style: none;
+            margin-bottom: 0;
+        }
+
+            .inner-table th:first-child, .inner-table td:first-child {
+                border-left: 0;
+            }
+
+            .inner-table thead:first-child tr:first-child th:first-child, .inner-table tbody:first-child tr:first-child td:first-child {
+                border-top-left-radius: 0;
+            }
+
+            .inner-table thead:last-child tr:last-child th:first-child, .inner-table tbody:last-child tr:last-child td:first-child, .inner-table tfoot:last-child tr:last-child td:first-child {
+                border-radius: 0;
+            }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="bootstrap/js/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="/ico/favicon.ico">
+</head>
+<body>
+
+    <div class="container">
+        <table class="table table-condensed table-bordered">
+            <thead>
+                <tr>
+                    <th>收件人地址</th>
+                    <th>快递公司</th>
+                    <th>快递单号</th>
+                    <th>费用结算方式</th>
+                    <th>所属部门</th>
+                    <th>发件人</th>
+                    <th>发件人电话</th>
+                    <th>收件人</th>
+                    <th>收件人电话</th>
+                    <th>所邮寄文件类型</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(var i = 0; i < expressItems.length; i += 1) {
+                    var item = expressItems[i];
+                    var subItems = item.subItems; %>
+                <tr>
+                    <td><%= subItems[0].recipientAddress %></td>
+                    <td><%= item.expressCompany %></td>
+                    <td><%= item.expressNumber %></td>
+                    <td><%= item.paymentTerm %></td>
+                    <td><%= subItems[0].department %></td>
+                    <td><%= subItems[0].sender %></td>
+                    <td><%= subItems[0].senderPhone %></td>
+                    <td><%= subItems[0].recipient %></td>
+                    <td><%= subItems[0].recipientPhone %></td>
+                    <td><%= subItems[0].fileType %></td>
+                </tr>
+                <% for(var j = 1; j < subItems.length; j += 1) { 
+                    var subItem = subItems[j]; %>
+                <tr>
+                    <td colspan="4"></td>
+                    <td><%= subItem.department %></td>
+                    <td><%= subItem.sender %></td>
+                    <td><%= subItem.senderPhone %></td>
+                    <td><%= subItem.recipient %></td>
+                    <td><%= subItem.recipientPhone %></td>
+                    <td><%= subItem.fileType %></td>
+                </tr>
+                <% } %>
+                <% } %>
+            </tbody>
+        </table>
+
+    </div>
+</body>
+</html>

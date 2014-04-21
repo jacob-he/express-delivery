@@ -1,0 +1,75 @@
+<table class="table table-condensed table-bordered">
+            <thead>
+                <tr>
+                    <th>快递日期</th>
+                    <th>申请日期</th>
+                    <th>快递公司</th>
+                    <th>快递单号</th>
+                    <th>费用结算方式</th>
+                    <th>所属部门</th>
+                    <th>发件人</th>
+                    <th>发件人电话</th>
+                    <th>收件人</th>
+                    <th>收件人电话</th>
+                    <th>收件人地址</th>
+                    <th>所邮寄文件类型</th>
+                    <th>快递原因</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(var i = 0; i < expressItems.length; i += 1) {
+                    var item = expressItems[i];
+                    var subItems = item.subItems; %>
+                <tr>
+                    <td><%= item.deliveryDate %></td>
+                    <td><%= item.dateOfApplication %></td>
+                    <td><%= item.expressCompany %></td>
+                    <td class="progress" 
+                    <% for(var j = 0; j < _expressCompany.length; j += 1){ 
+                        if(_expressCompany[j].name == item.expressCompany) { 
+                    %>
+                    data-code=<%=_expressCompany[j].code%> 
+                    <% 
+                        } 
+                       } 
+                    %> 
+                    data-company="<%=item.expressCompany%>" data-number="<%=item.expressNumber%>"><a target="_blank" href="http://www.kuaidi100.com/chaxun?com=<%=encodeURIComponent(item.expressCompany)%>&nu=<%=item.expressNumber%>"><%= item.expressNumber %></a></td>
+                    <td><%= item.paymentTerm %></td>
+                    <td><%= subItems[0].department %></td>
+                    <td><%= subItems[0].sender %></td>
+                    <td><%= subItems[0].senderPhone %></td>
+                    <td><%= subItems[0].recipient %></td>
+                    <td><%= subItems[0].recipientPhone %></td>
+                    <td><%= subItems[0].recipientAddress %></td>
+                    <td><%= subItems[0].fileType %></td>
+                    <td><%= subItems[0].deliveryReason %></td>
+                </tr>
+                <% for(var j = 1; j < subItems.length; j += 1) { 
+                     var subItem = subItems[j]; %>
+                <tr>
+                    <td colspan="5">搭单</td>
+                    <td><%= subItem.department %></td>
+                    <td><%= subItem.sender %></td>
+                    <td><%= subItem.senderPhone %></td>
+                    <td><%= subItem.recipient %></td>
+                    <td><%= subItem.recipientPhone %></td>
+                    <td><%= subItem.recipientAddress %></td>
+                    <td><%= subItem.fileType %></td>
+                    <td><%= subItem.deliveryReason %></td>
+                </tr>
+                <% } %>
+                <% } %>
+            </tbody>
+        </table>
+        <div class="pagination">
+            <ul>
+                <% var pages = Math.ceil(count / size);
+                    for(var k = 1; k <= pages; k += 1) { 
+                    if(k === page) {
+                %>
+                <li class="active"><a href="javascript:void(0);"><%= k %></a></li>
+                <% } else { %>
+                <li data-page="<%= k %>"><a href="#"><%= k %></a></li>
+                <% } } %>
+            </ul>
+        </div>

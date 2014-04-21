@@ -1,0 +1,20 @@
+<% include ../layouts/head %>
+<% include ../layouts/topbar %>
+
+    <div class="container">
+        <form action="/user/login" method="post">
+        <div>
+            <label>用户名：</label>
+            <input type="text" name="username" /><br />
+        </div>
+        <div>
+            <label>密 码：</label>
+            <input type="password" name="password" />
+        </div>
+        <div>
+            <input type="submit" value="登录" class="btn btn-primary" />
+        </div>
+        </form>
+    </div>
+
+    <% include ../layouts/foot %>

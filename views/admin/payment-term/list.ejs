@@ -1,0 +1,40 @@
+﻿<table id="list-table" class="table table-striped table-bordered">
+    <colgroup>
+        <col style="width: 140px;" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>#
+            </th>
+            <th>付款方式
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <% for(var i = 0; i < paymentTerms.length; i++) { 
+			var paymentTerm = paymentTerms[i]; %>
+        <tr class="tb-list">
+            <td>
+                <a href="#" data-id="<%= paymentTerm._id %>" class="btn btn-primary">编辑</a>
+                <a href="#" data-id="<%= paymentTerm._id %>" class="btn btn-danger">删除
+                </a>
+            </td>
+            <td>
+                <%= paymentTerm.name %>
+            </td>
+        </tr>
+        <% } %>
+    </tbody>
+</table>
+<div class="pagination">
+    <ul>
+        <% var pages = Math.ceil(count / size);
+                    for(var k = 1; k <= pages; k += 1) { 
+                    if(k === page) {
+        %>
+        <li class="active"><a href="javascript:void(0);"><%= k %></a></li>
+        <% } else { %>
+        <li data-page="<%= k %>"><a href="#"><%= k %></a></li>
+        <% } } %>
+    </ul>
+</div>

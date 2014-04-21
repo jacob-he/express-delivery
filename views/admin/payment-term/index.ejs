@@ -1,0 +1,26 @@
+﻿<% include ../../layouts/head %>
+
+<% include ../../layouts/topbar %>
+
+    <div class="container">
+        <form>
+        <button type="button" id="add" class="btn btn-primary">添加</button>
+        </form>
+        <div id="list" data-list-url="/admin/payment-term/list" data-dialog-url="/admin/payment-term/view"
+            data-remove-url="/admin/payment-term/remove" data-save-url="/admin/payment-term/save">
+        </div>
+        <form id="edit-dialog" class="form-horizontal" style="display: none;">
+        </form>
+    </div>
+
+    <script type="text/javascript" src="/js/pagify.js"></script>
+    <script type="text/javascript">
+      $(function(){
+          $(document.body).pagify({
+              start_page: 1
+              , page_size: 20
+          });
+      });
+    </script>
+
+<% include ../../layouts/foot %>

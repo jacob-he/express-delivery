@@ -1,0 +1,45 @@
+<% include ../layouts/head %>
+
+    <% include ../layouts/topbar %>
+
+    <div class="container">
+        <form id="search-form" class="form-inline">
+        <label for="selectDate" class="control-label">日期：</label>
+        <input id="selectDate" type="text" class="select-date" name="deliveryDate" value="<%= defaultDate %>">
+        <label for="inputSender" class="control-label">发件人：</label>
+        <input type="text" id="inputSender" name="sender" placeholder="发件人">
+        <label for="inputRecipient" class="control-label">收件人：</label>
+        <input type="text" id="inputRecipient" name="recipient" placeholder="收件人">
+        <button type="button" class="btn" id="search">检索</button>
+        </form>
+        <div id="list" data-list-url="/history/list">
+        </div>
+
+    <script type="text/javascript" src="/js/pagify.js"></script>
+    <script type="text/javascript" src="/js/ajaxpopover.js"></script>
+    <script type="text/javascript">
+      $(function(){
+          $(document.body).pagify({
+              start_page: 1
+              , page_size: 20
+              , listloaded: function(e, list) {
+                  //console.log(list);
+                  list.find('.progress').each(function(){
+                      var td = $(this);
+                      td.ajaxpopover({
+                          title: td.data('company') + ' - ' + td.data('number')
+                          , content: '正在查询进度。。。'
+                          , trigger: 'hover'
+                          , url: '/history/progress'
+                          , data: {
+                              company: td.data('code')
+                              , number: td.data('number')
+                          }
+                      });
+                  });
+              }
+          });
+      });
+    </script>
+
+<% include ../layouts/foot %>

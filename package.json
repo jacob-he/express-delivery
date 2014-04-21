@@ -1,0 +1,37 @@
+{
+    "name": "express-delivery",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "start": "node --harmony app.js",
+        "test": "mocha --harmony"
+    },
+    "dependencies": {
+        "koa": "*",
+        "koa-logger": "*",
+        "koa-static": "*",
+        "koa-router": "*",
+        "koa-compress": "*",
+        "koa-views": "*",
+        "koa-sess": "*",
+        "co-body": "*",
+        "mongoose": "*",
+        "async": "*",
+        "moment": "*",
+        "ejs": "*",
+        "winston": "*",
+        "mkdirp": "*",
+        "underscore.string": "*",
+        "thunkify": "*",
+        "request": "*",
+        "koa-passport": "*",
+        "passport-local": "*",
+        "node-uuid": "*",
+        "nconf": "*",
+        "koa-formidable": "*"
+    },
+    "devDependencies": {
+        "supertest": "~0.9.2",
+        "mocha": "~1.17.1"
+    }
+}

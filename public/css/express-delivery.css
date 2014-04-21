@@ -1,0 +1,77 @@
+﻿body {
+    padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+}
+
+.select-date {
+    cursor: text !important;
+    width: 80px;
+}
+
+.logo {
+    background: url("/img/logo.png") 0 4px no-repeat;
+    text-indent: 35px;
+}
+
+.navbar .brand {
+    color: #FFFFFF;
+    text-shadow: none;
+}
+
+.navbar-inner {
+    background-color: #4C5E9A;
+    background-image: -moz-linear-gradient(center top, #4C5E9A, #33488C);
+    background-image: -webkit-linear-gradient(top, #4C5E9A, #33488C);
+    filter: progid:dximagetransform.microsoft.gradient(startColorstr='#4C5E9A', endColorstr='#33488C', GradientType=0);
+}
+
+.navbar .nav .active > a, .navbar .nav .active > a:hover {
+    background-color: #33488C;
+    color: #FFFFFF;
+}
+
+.navbar .nav > li > a {
+    color: #AAAAAA;
+    text-shadow: none;
+}
+
+    .navbar .nav > li > a:focus, .navbar .nav > li > a:hover {
+        color: #FFFFFF;
+    }
+
+.navbar .divider-vertical {
+    background-color: #33488C;
+    border-right: 1px solid #4C5E9A;
+}
+
+.inner-table {
+    border-style: none;
+    margin-bottom: 0;
+}
+
+    .inner-table th:first-child, .inner-table td:first-child {
+        border-left: 0;
+    }
+
+    .inner-table thead:first-child tr:first-child th:first-child, .inner-table tbody:first-child tr:first-child td:first-child {
+        border-top-left-radius: 0;
+    }
+
+    .inner-table thead:last-child tr:last-child th:first-child, .inner-table tbody:last-child tr:last-child td:first-child, .inner-table tfoot:last-child tr:last-child td:first-child {
+        border-radius: 0;
+    }
+.form-horizontal .control-group {
+    margin-bottom: 10px;
+}
+.nav-pills {
+    margin-bottom: 0px;
+}
+
+.express-company {
+    width: 100px;
+}
+.payment-term {
+    width: 100px;
+}
+.popover {
+    width: 560px;
+}
